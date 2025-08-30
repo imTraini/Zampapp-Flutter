@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'user_signup_screen.dart';
-// Importa qui la futura schermata di registrazione del canile
-// import 'shelter_signup_screen.dart';
+import 'shelter_signup_screen.dart'; // <-- 1. IMPORTA LA NUOVA SCHERMATA
 
 class RegistrationChoiceScreen extends StatelessWidget {
   const RegistrationChoiceScreen({super.key});
@@ -88,9 +87,11 @@ class RegistrationChoiceScreen extends StatelessWidget {
               title: 'Profilo Canile',
               subtitle: 'Registra la tua struttura e gestisci i tuoi animali.',
               onTap: () {
-                // TODO: Navigare alla schermata di registrazione per canili
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Schermata in costruzione.')),
+                // --- 2. AZIONE MODIFICATA ---
+                // Sostituisci il TODO con la navigazione alla nuova schermata
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ShelterSignUpScreen()),
                 );
               },
             ),
