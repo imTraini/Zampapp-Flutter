@@ -45,5 +45,14 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<!-- Permessi per Image Picker -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Questa app ha bisogno di accedere alla tua galleria per permetterti di scegliere una foto profilo.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Questa app ha bisogno di accedere alla tua fotocamera per permetterti di scattare una foto profilo.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Questa app ha bisogno di accedere al microfono se vuoi registrare video con la fotocamera.</string>
+
 </dict>
 </plist>
