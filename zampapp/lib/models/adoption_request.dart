@@ -26,7 +26,6 @@ class AdoptionRequest {
     required this.dataRichiesta,
     required this.status,
     this.dataAggiornamentoStato,
-    // Inizializza i nuovi campi nel costruttore
     this.richiedenteNome,
     this.richiedenteCognome,
     this.richiedenteEmail,
@@ -46,7 +45,6 @@ class AdoptionRequest {
       dataRichiesta: data['dataRichiesta'] ?? Timestamp.now(),
       status: data['status'] ?? 'In elaborazione',
       dataAggiornamentoStato: data['dataAggiornamentoStato'],
-      // Popola i nuovi campi dai dati del documento
       richiedenteNome: data['richiedenteNome'],
       richiedenteCognome: data['richiedenteCognome'],
       richiedenteEmail: data['richiedenteEmail'],

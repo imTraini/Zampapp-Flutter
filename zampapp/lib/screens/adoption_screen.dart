@@ -4,8 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 import 'confirm_adoption_screen.dart';
-
-// Assicurati che questi import puntino ai tuoi modelli di dati corretti
 import '../models/dog_model.dart';
 import '../models/adoption_request.dart';
 
@@ -36,9 +34,6 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
       return;
     }
 
-    // --- MODIFICA QUI: Inverti l'ordine per rispettare le regole ---
-    // Se le regole permettono a un canile di leggere solo il suo documento
-    // in `canili`, prova prima a leggere lì.
     final shelterDoc = await _firestore.collection('canili').doc(user.uid).get();
     if (shelterDoc.exists) {
       if (mounted) {
@@ -50,7 +45,6 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
       return;
     }
 
-    // Se l'utente non è un canile, prova a leggere il suo documento in `utenti`.
     final userDoc = await _firestore.collection('utenti').doc(user.uid).get();
     if (userDoc.exists) {
       if (mounted) {
@@ -93,7 +87,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
   }
 
   // ===========================================================================
-  // VISTA UTENTE (INVARIATA)
+  // VISTA UTENTE (NON NECESSITA DI MODIFICHE MAGGIORI)
   // ===========================================================================
 
   Widget _buildUserView() {
@@ -183,7 +177,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
   }
 
   // ===========================================================================
-  // VISTA CANILE (MODIFICATA)
+  // VISTA CANILE
   // ===========================================================================
 
   Widget _buildCanileView() {
@@ -226,22 +220,13 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
     final dogDoc = await _firestore.collection('cani').doc(request.dogId).get();
 
     if (!dogDoc.exists) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Errore: dati non trovati.')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Errore: dati del cane non trovati.')));
       return;
     }
 
     final dog = Dog.fromFirestore(dogDoc);
-    final userData = {
-      'nome': request.richiedenteNome,
-      'cognome': request.richiedenteCognome,
-      'email': request.richiedenteEmail,
-      'telefono': request.richiedenteTelefono,
-      'via': request.richiedenteVia,
-      'citta': request.richiedenteCitta,
-      'provincia': request.richiedenteProvincia,
-    };
-    final String nomeCompleto = '${userData['nome'] ?? ''} ${userData['cognome'] ?? ''}'.trim();
-    final String indirizzo = '${userData['via'] ?? ''}, ${userData['citta'] ?? ''} (${userData['provincia'] ?? ''})'.trim();
+    final String nomeCompleto = '${request.richiedenteNome ?? ''} ${request.richiedenteCognome ?? ''}'.trim();
+    final String indirizzo = '${request.richiedenteVia ?? ''}, ${request.richiedenteCitta ?? ''} (${request.richiedenteProvincia ?? ''})'.trim();
     final (nextStatus, actionText) = switch (request.status) {
       "In elaborazione" => ("Attesa moduli", "Invia moduli idoneità"),
       "Attesa moduli" => ("Attesa controllo abitazione", "Richiedi controllo"),
@@ -259,8 +244,8 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
               children: <Widget>[
                 Text('Dati Richiedente:', style: Theme.of(context).textTheme.titleMedium),
                 Text('Nome: $nomeCompleto'),
-                Text('Email: ${userData['email'] ?? 'N/D'}'),
-                Text('Telefono: ${userData['telefono'] ?? 'N/D'}'),
+                Text('Email: ${request.richiedenteEmail ?? 'N/D'}'),
+                Text('Telefono: ${request.richiedenteTelefono ?? 'N/D'}'),
                 Text('Indirizzo: $indirizzo'),
                 const Divider(height: 20),
                 Text('Stato Attuale:', style: Theme.of(context).textTheme.titleMedium),
@@ -326,7 +311,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
 }
 
 // ===========================================================================
-// WIDGETS PERSONALIZZATI (INVARIATI)
+// WIDGETS PERSONALIZZATI
 // ===========================================================================
 
 class _DogCard extends StatelessWidget {
@@ -412,10 +397,8 @@ class _RequestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Ora il widget usa direttamente i dati della richiesta
     final nomeCompleto = '${request.richiedenteNome ?? ''} ${request.richiedenteCognome ?? ''}'.trim();
 
-    // Il FutureBuilder è stato mantenuto solo per recuperare i dettagli del cane.
     return FutureBuilder<Dog?>(
       future: _fetchDogDetails(),
       builder: (context, snapshot) {
@@ -465,7 +448,6 @@ class _RequestCard extends StatelessWidget {
     );
   }
 
-  // Funzione modificata per recuperare SOLO i dettagli del cane
   Future<Dog?> _fetchDogDetails() async {
     final firestore = FirebaseFirestore.instance;
     final dogDoc = await firestore.collection('cani').doc(request.dogId).get();

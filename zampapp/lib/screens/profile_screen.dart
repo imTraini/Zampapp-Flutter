@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'edit_profile_screen.dart';
-import '../widgets/my_dogs_list.dart'; // <-- 1. IMPORTA IL NUOVO WIDGET
-import '../widgets/user_adoption_status_list.dart'; // <-- AGGIUNGI QUESTO
+import '../widgets/my_dogs_list.dart';
+import '../widgets/user_adoption_status_list.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -85,10 +85,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(16.0),
-              child: Column( // Rimuovi il Center per allineare a sinistra
-                crossAxisAlignment: CrossAxisAlignment.stretch, // Allunga i figli
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // --- Sezione Intestazione Profilo (centrata) ---
                   Column(
                     children: [
                       CircleAvatar(
@@ -121,14 +120,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const Divider(height: 40),
 
-                  // --- Sezione "I Miei Cani" ---
                   Text(
                     isShelter ? 'I Cani del Canile' : 'I Miei Cani',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 16),
 
-                  // --- 2. SOSTITUISCI IL CONTAINER CON IL NUOVO WIDGET ---
                   MyDogsList(
                     accountType: accountType,
                     userId: _auth.currentUser!.uid,
@@ -136,7 +133,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   const SizedBox(height: 24),
 
-                  // --- Sezione "Stato Adozioni" (solo per utenti) ---
                   // --- Sezione "Stato Adozioni" (solo per utenti) ---
                   if (!isShelter) ...[
                     Text(

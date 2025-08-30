@@ -1,10 +1,10 @@
-// lib/screens/confirm_adoption_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../models/dog_model.dart'; // Assicurati che il percorso sia corretto
+
+import '../models/dog_model.dart';
+import '../models/adoption_request.dart';
 
 class ConfirmAdoptionScreen extends StatefulWidget {
   final Dog dog;
@@ -37,25 +37,32 @@ class _ConfirmAdoptionScreenState extends State<ConfirmAdoptionScreen> {
     setState(() => _isSending = true);
 
     final user = FirebaseAuth.instance.currentUser;
-
     if (user == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Errore: utente non autenticato.'),
-              backgroundColor: Colors.red),
+          const SnackBar(content: Text('Errore: utente non autenticato.'), backgroundColor: Colors.red),
         );
       }
       setState(() => _isSending = false);
       return;
     }
 
+    final userDoc = await FirebaseFirestore.instance.collection('utenti').doc(user.uid).get();
+    if (!userDoc.exists) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Errore: dati utente non trovati.'), backgroundColor: Colors.red),
+        );
+      }
+      setState(() => _isSending = false);
+      return;
+    }
+    final userData = userDoc.data();
+
     if (widget.dog.proprietarioId == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Errore: ID canile mancante.'),
-              backgroundColor: Colors.red),
+          const SnackBar(content: Text('Errore: ID canile mancante.'), backgroundColor: Colors.red),
         );
       }
       setState(() => _isSending = false);
@@ -68,34 +75,28 @@ class _ConfirmAdoptionScreenState extends State<ConfirmAdoptionScreen> {
       'caneId': widget.dog.id,
       'dataRichiesta': Timestamp.now(),
       'status': 'In elaborazione',
+      'richiedenteNome': userData?['nome'] ?? 'N/D',
+      'richiedenteCognome': userData?['cognome'] ?? 'N/D',
+      'richiedenteEmail': userData?['email'] ?? 'N/D',
+      'richiedenteTelefono': userData?['telefono'] ?? 'N/D',
+      'richiedenteVia': userData?['via'] ?? 'N/D',
+      'richiedenteCitta': userData?['citta'] ?? 'N/D',
+      'richiedenteProvincia': userData?['provincia'] ?? 'N/D',
       'dataAggiornamentoStato': null,
     };
 
-    debugPrint('--- DEBUG ADOPTION REQUEST ---');
-    debugPrint('User UID: ${user.uid}');
-    debugPrint('Dog proprietarioId: ${widget.dog.proprietarioId}');
-    debugPrint('Request data: $newRequest');
-    debugPrint('-----------------------------');
-
     try {
-      await FirebaseFirestore.instance
-          .collection('richiesteAdozione')
-          .add(newRequest);
+      await FirebaseFirestore.instance.collection('richiesteAdozione').add(newRequest);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Richiesta inviata con successo!'),
-              backgroundColor: Colors.green),
+          const SnackBar(content: Text('Richiesta inviata con successo!'), backgroundColor: Colors.green),
         );
         Navigator.of(context).pop();
       }
     } catch (e) {
-      debugPrint('Firestore write error: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('Errore nell\'invio della richiesta: $e'),
-              backgroundColor: Colors.red),
+          SnackBar(content: Text('Errore nell\'invio della richiesta: $e'), backgroundColor: Colors.red),
         );
       }
     } finally {
@@ -142,7 +143,7 @@ class _ConfirmAdoptionScreenState extends State<ConfirmAdoptionScreen> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 24.0), // Aggiunge più spazio in basso
+        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 24.0),
         child: _isSending
             ? const Center(child: CircularProgressIndicator())
             : ElevatedButton.icon(
