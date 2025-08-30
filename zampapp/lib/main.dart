@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'firebase_options.dart';
 import 'screens/auth_gate.dart';
 
@@ -8,6 +9,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // ✅ Aggiunto per risolvere l'errore di formattazione della data
+  await initializeDateFormatting('it_IT', null);
+
   runApp(const ZampApp());
 }
 

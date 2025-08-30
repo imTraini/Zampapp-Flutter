@@ -19,6 +19,7 @@ dependencies:
   # Utility packages
   cached_network_image: ^3.3.1
   image_picker: ^1.1.2      # <-- Pacchetto per scegliere immagini
+  intl: ^0.19.0
 
   # iOS style icons
   cupertino_icons: ^1.0.8

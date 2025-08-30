@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'edit_profile_screen.dart';
 import '../widgets/my_dogs_list.dart'; // <-- 1. IMPORTA IL NUOVO WIDGET
+import '../widgets/user_adoption_status_list.dart'; // <-- AGGIUNGI QUESTO
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -136,22 +137,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 24),
 
                   // --- Sezione "Stato Adozioni" (solo per utenti) ---
+                  // --- Sezione "Stato Adozioni" (solo per utenti) ---
                   if (!isShelter) ...[
                     Text(
                       'Stato Adozioni',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
-                    Container(
-                      height: 150,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Center(child: Text('Lista stato adozioni in costruzione')),
-                    ),
+                    UserAdoptionStatusList(userId: _auth.currentUser!.uid),
                   ],
+
                 ],
               ),
             ),

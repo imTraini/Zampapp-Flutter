@@ -27,7 +27,6 @@ class Dog {
     required this.status,
   });
 
-  // Metodo per creare un oggetto Dog da un documento Firestore
   factory Dog.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Dog(
@@ -44,4 +43,8 @@ class Dog {
       status: data['status'] ?? 'di_proprieta',
     );
   }
+
+  // Getter aggiuntivi (compatibilità con vecchio codice)
+  String get dogName => nome;
+  String get dogImageUrl => urlImmagine;
 }
