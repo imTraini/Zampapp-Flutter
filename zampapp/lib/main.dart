@@ -10,7 +10,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // ✅ Aggiunto per risolvere l'errore di formattazione della data
   await initializeDateFormatting('it_IT', null);
 
   runApp(const ZampApp());
@@ -21,10 +20,19 @@ class ZampApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    // Definizione del colore azzurro personalizzato.
+    final Color azzurro = Color(0xFF73AAEA);
+
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ZampApp',
-      home: AuthGate(),
+      // Imposta il tema dell'intera applicazione.
+      theme: ThemeData(
+        // Utilizza ColorScheme.fromSeed per un tema moderno basato su un colore "seme".
+        colorScheme: ColorScheme.fromSeed(seedColor: azzurro),
+        useMaterial3: true,
+      ),
+      home: const AuthGate(),
     );
   }
 }
