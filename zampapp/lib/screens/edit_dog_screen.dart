@@ -43,7 +43,6 @@ class _EditDogScreenState extends State<EditDogScreen> {
           ? DateFormat('dd/MM/yyyy').format(widget.dog.dataNascita!.toDate())
           : '',
     );
-    // FIX: Assicurati che le variabili di stato siano inizializzate con i dati del cane.
     _selectedSesso = widget.dog.sesso.isNotEmpty ? widget.dog.sesso : null;
     _selectedTaglia = widget.dog.taglia.isNotEmpty ? widget.dog.taglia : null;
   }
@@ -277,9 +276,27 @@ class _EditDogScreenState extends State<EditDogScreen> {
                 validator: (value) => value!.trim().isEmpty ? 'Campo richiesto' : null,
               ),
               const SizedBox(height: 16),
-              _buildSessoRadio(),
+              const Text('Sesso', style: TextStyle(fontSize: 16)),
+              DropdownButtonFormField<String>(
+                value: _selectedSesso,
+                items: ['Maschio', 'Femmina']
+                    .map((s) => DropdownMenuItem(value: s, child: Text(s.capitalize())))
+                    .toList(),
+                onChanged: (v) => setState(() => _selectedSesso = v),
+                validator: (v) => v == null ? 'Campo obbligatorio' : null,
+                decoration: const InputDecoration(border: OutlineInputBorder()),
+              ),
               const SizedBox(height: 16),
-              _buildTagliaRadio(), // Qui verrà chiamato il nuovo widget
+              const Text('Taglia', style: TextStyle(fontSize: 16)),
+              DropdownButtonFormField<String>(
+                value: _selectedTaglia,
+                items: ['Piccola', 'Media', 'Grande']
+                    .map((t) => DropdownMenuItem(value: t, child: Text(t.capitalize())))
+                    .toList(),
+                onChanged: (v) => setState(() => _selectedTaglia = v),
+                validator: (v) => v == null ? 'Campo obbligatorio' : null,
+                decoration: const InputDecoration(border: OutlineInputBorder()),
+              ),
               const SizedBox(height: 32),
               _isSaving
                   ? const Center(child: CircularProgressIndicator())
@@ -293,61 +310,10 @@ class _EditDogScreenState extends State<EditDogScreen> {
       ),
     );
   }
+}
 
-  Widget _buildSessoRadio() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Sesso', style: Theme.of(context).textTheme.titleMedium),
-        Row(
-          children: [
-            Expanded(
-              child: RadioListTile<String>(
-                title: const Text('Maschio'),
-                value: 'maschio',
-                groupValue: _selectedSesso,
-                onChanged: (value) => setState(() => _selectedSesso = value),
-              ),
-            ),
-            Expanded(
-              child: RadioListTile<String>(
-                title: const Text('Femmina'),
-                value: 'femmina',
-                groupValue: _selectedSesso,
-                onChanged: (value) => setState(() => _selectedSesso = value),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  // Widget della selezione della taglia aggiornato
-  Widget _buildTagliaRadio() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Taglia', style: Theme.of(context).textTheme.titleMedium),
-        RadioListTile<String>(
-          title: const Text('Piccola'),
-          value: 'piccola',
-          groupValue: _selectedTaglia,
-          onChanged: (value) => setState(() => _selectedTaglia = value),
-        ),
-        RadioListTile<String>(
-          title: const Text('Media'),
-          value: 'media',
-          groupValue: _selectedTaglia,
-          onChanged: (value) => setState(() => _selectedTaglia = value),
-        ),
-        RadioListTile<String>(
-          title: const Text('Grande'),
-          value: 'grande',
-          groupValue: _selectedTaglia,
-          onChanged: (value) => setState(() => _selectedTaglia = value),
-        ),
-      ],
-    );
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1)}";
   }
 }
