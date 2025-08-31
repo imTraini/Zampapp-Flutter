@@ -13,7 +13,6 @@ class _ShelterSignUpScreenState extends State<ShelterSignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
 
-  // Controllers per tutti i campi del form
   final _nomeCanileController = TextEditingController();
   final _telefonoController = TextEditingController();
   final _emailController = TextEditingController();
@@ -26,7 +25,6 @@ class _ShelterSignUpScreenState extends State<ShelterSignUpScreen> {
   final _confermaPasswordController = TextEditingController();
 
   Future<void> _signUpShelter() async {
-    // 1. Valida l'input del form
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -34,12 +32,9 @@ class _ShelterSignUpScreenState extends State<ShelterSignUpScreen> {
     setState(() { _isLoading = true; });
 
     try {
-      // 2. Controlla che le password corrispondano
       if (_passwordController.text != _confermaPasswordController.text) {
         throw 'Le password non corrispondono.';
       }
-
-      // 3. Crea l'utente in Firebase Authentication
       final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
@@ -50,7 +45,6 @@ class _ShelterSignUpScreenState extends State<ShelterSignUpScreen> {
         throw 'Errore: UID utente non disponibile dopo la registrazione.';
       }
 
-      // 4. Prepara i dati da salvare in Firestore
       final canileData = {
         "nomeCanile": _nomeCanileController.text.trim(),
         "telefono": _telefonoController.text.trim(),
@@ -60,11 +54,9 @@ class _ShelterSignUpScreenState extends State<ShelterSignUpScreen> {
         "citta": _cittaController.text.trim(),
         "cap": _capController.text.trim(),
         "via": _viaController.text.trim(),
-        "tokens": 0, // Inizializza i token a 0 per i canili
+        "tokens": 0,
         "accountType": "canile",
       };
-
-      // 5. Salva il documento nella collezione 'canili' con l'UID dell'utente
       await FirebaseFirestore.instance.collection("canili").doc(user.uid).set(canileData);
 
       if(mounted) {
@@ -74,7 +66,6 @@ class _ShelterSignUpScreenState extends State<ShelterSignUpScreen> {
             backgroundColor: Colors.green,
           ),
         );
-        // Torna indietro fino alla prima schermata dello stack (login/auth_gate)
         Navigator.of(context).popUntil((route) => route.isFirst);
       }
 

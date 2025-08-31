@@ -22,7 +22,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late String _accountType;
   late String _currentImageUrl;
 
-  // Controllers per ogni campo del form
   final Map<String, TextEditingController> _controllers = {
     'nome': TextEditingController(),
     'cognome': TextEditingController(),
@@ -80,14 +79,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       String? newImageUrl;
       final user = FirebaseAuth.instance.currentUser!;
 
-      // 1. Carica la nuova immagine (se selezionata)
       if (_selectedImage != null) {
         final ref = FirebaseStorage.instance.ref().child('profile_pics').child('${user.uid}.jpg');
         await ref.putFile(_selectedImage!);
         newImageUrl = await ref.getDownloadURL();
       }
 
-      // 2. Prepara i dati da aggiornare
       Map<String, dynamic> updates;
       if (_accountType == 'canile') {
         updates = {
@@ -118,7 +115,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         updates['profilePicUrl'] = newImageUrl;
       }
 
-      // 3. Salva i dati in Firestore
       final collectionName = _accountType == 'canile' ? 'canili' : 'utenti';
       await FirebaseFirestore.instance.collection(collectionName).doc(user.uid).set(updates, SetOptions(merge: true));
 

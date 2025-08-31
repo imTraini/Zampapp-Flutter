@@ -20,15 +20,12 @@ class ZampApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Definizione del colore azzurro personalizzato.
     final Color azzurro = Color(0xFF73AAEA);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ZampApp',
-      // Imposta il tema dell'intera applicazione.
-      theme: ThemeData(
-        // Utilizza ColorScheme.fromSeed per un tema moderno basato su un colore "seme".
+      theme: ThemeData(.
         colorScheme: ColorScheme.fromSeed(seedColor: azzurro),
         useMaterial3: true,
       ),

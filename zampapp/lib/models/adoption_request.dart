@@ -8,8 +8,6 @@ class AdoptionRequest {
   final Timestamp dataRichiesta;
   final String status;
   final Timestamp? dataAggiornamentoStato;
-
-  // Campi aggiunti per i dati del richiedente
   final String? richiedenteNome;
   final String? richiedenteCognome;
   final String? richiedenteEmail;

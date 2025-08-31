@@ -133,7 +133,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   const SizedBox(height: 24),
 
-                  // --- Sezione "Stato Adozioni" (solo per utenti) ---
                   if (!isShelter) ...[
                     Text(
                       'Stato Adozioni',

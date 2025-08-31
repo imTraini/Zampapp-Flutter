@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'user_signup_screen.dart';
-import 'shelter_signup_screen.dart'; // <-- 1. IMPORTA LA NUOVA SCHERMATA
+import 'shelter_signup_screen.dart';
 
 class RegistrationChoiceScreen extends StatelessWidget {
   const RegistrationChoiceScreen({super.key});
@@ -87,8 +87,6 @@ class RegistrationChoiceScreen extends StatelessWidget {
               title: 'Profilo Canile',
               subtitle: 'Registra la tua struttura e gestisci i tuoi animali.',
               onTap: () {
-                // --- 2. AZIONE MODIFICATA ---
-                // Sostituisci il TODO con la navigazione alla nuova schermata
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const ShelterSignUpScreen()),

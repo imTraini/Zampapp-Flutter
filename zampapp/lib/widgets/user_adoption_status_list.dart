@@ -47,11 +47,9 @@ class UserAdoptionStatusList extends StatelessWidget {
           final requestDate = request.dataRichiesta.toDate();
           final updateDate = request.dataAggiornamentoStato?.toDate();
 
-          // Display final status requests for 1 month after update
           if (isFinalStatus) {
             return updateDate != null && updateDate.isAfter(oneMonthAgo);
           } else {
-            // Display pending requests for 1 month after creation
             return requestDate.isAfter(oneMonthAgo);
           }
         }).toList();
@@ -85,7 +83,6 @@ class _UserAdoptionStatusCard extends StatelessWidget {
   final AdoptionRequest request;
   const _UserAdoptionStatusCard({required this.request});
 
-  // Funzione per ottenere il nome del canile (rimane invariata)
   Future<String> _fetchShelterName() async {
     if (request.canileId == null) return "Canile non trovato";
     final firestore = FirebaseFirestore.instance;
@@ -131,8 +128,7 @@ class _UserAdoptionStatusCard extends StatelessWidget {
 
         final dog = Dog.fromFirestore(snapshot.data!);
 
-        // Definisci i colori in base allo stato
-        Color statusColor = Colors.orange; // Colore di default per "In elaborazione"
+        Color statusColor = Colors.orange;
         if (request.status == "Accettata") {
           statusColor = Colors.green.shade700;
         } else if (request.status == "Rifiutata") {
@@ -151,7 +147,7 @@ class _UserAdoptionStatusCard extends StatelessWidget {
                 Row(
                   children: [
                     CircleAvatar(
-                      radius: 28, // Dimensione leggermente più grande
+                      radius: 28,
                       backgroundImage: CachedNetworkImageProvider(dog.urlImmagine),
                       onBackgroundImageError: (exception, stackTrace) => const Icon(Icons.pets),
                       backgroundColor: Colors.grey.shade200,
@@ -165,14 +161,13 @@ class _UserAdoptionStatusCard extends StatelessWidget {
                             dog.nome,
                             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          // Rimosso "Richiesta a: Canile..."
                           Text(
                             'Data: ${DateFormat('dd MMM yyyy', 'it_IT').format(request.dataRichiesta.toDate())}', // Formato più compatto
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            request.status, // Mostra lo stato corrente
+                            request.status,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
@@ -201,15 +196,15 @@ class _AdoptionProgressBar extends StatelessWidget {
   const _AdoptionProgressBar({required this.status});
 
   static const List<String> steps = [
-    'Inviata', // Rinominato 'In elaborazione' a 'Inviata' per chiarezza
+    'Inviata',
     'Moduli',
     'Controllo',
     'Accettata',
-    'Rifiutata', // Lasciamo Rifiutata come stato finale ma visualizzabile
+    'Rifiutata',
   ];
 
   int _getStepIndex(String currentStatus) {
-    if (currentStatus == 'In elaborazione') return 0; // Mappa 'In elaborazione' a 'Inviata'
+    if (currentStatus == 'In elaborazione') return 0;
     return steps.indexOf(currentStatus);
   }
 
@@ -220,7 +215,7 @@ class _AdoptionProgressBar extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0), // Padding per la barra di progresso
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(steps.length, (index) {
@@ -231,17 +226,17 @@ class _AdoptionProgressBar extends StatelessWidget {
 
 
               Color dotColor = Colors.grey.shade400;
-              if (isCompleted && !isFinalAndRejected) { // Non colorare di verde se è rifiutata
-                dotColor = Colors.blue; // Colore blu per i passi completati
+              if (isCompleted && !isFinalAndRejected) {
+                dotColor = Colors.blue;
               }
               if (isFinalAndRejected) {
-                dotColor = Colors.red; // Rosso per stato rifiutato
+                dotColor = Colors.red;
               }
               if (isFinalAndAccepted) {
-                dotColor = Colors.green; // Verde per stato accettato
+                dotColor = Colors.green;
               }
               if (isCurrent && !isFinalAndRejected && !isFinalAndAccepted) {
-                dotColor = Theme.of(context).primaryColor; // Colore primario per lo stato attuale
+                dotColor = Theme.of(context).primaryColor;
               }
 
 
@@ -255,7 +250,7 @@ class _AdoptionProgressBar extends StatelessWidget {
                           width: 24,
                           height: 24,
                           decoration: BoxDecoration(
-                            color: dotColor.withOpacity(isCompleted ? 1.0 : 0.3), // Colore più tenue per non completati
+                            color: dotColor.withOpacity(isCompleted ? 1.0 : 0.3),
                             shape: BoxShape.circle,
                             border: Border.all(color: dotColor, width: 1.5),
                           ),
@@ -272,7 +267,6 @@ class _AdoptionProgressBar extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        // Linea di collegamento
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(
@@ -280,10 +274,10 @@ class _AdoptionProgressBar extends StatelessWidget {
               final isCompletedSegment = index < currentIndex;
               Color lineColor = Colors.grey.shade300;
               if (isCompletedSegment && !(status == "Rifiutata" && index >= _getStepIndex("Accettata"))) {
-                lineColor = Colors.blue; // Linea blu per segmenti completati
+                lineColor = Colors.blue;
               } else if (status == "Rifiutata" && index == _getStepIndex("Moduli") ||
                   status == "Rifiutata" && index == _getStepIndex("Controllo")) {
-                lineColor = Colors.red; // Linea rossa se rifiutato a un passo intermedio
+                lineColor = Colors.red;
               }
 
 
@@ -318,7 +312,7 @@ class _AdoptionProgressBar extends StatelessWidget {
               textColor = Colors.green.shade700;
               textWeight = FontWeight.bold;
             } else if (isCurrent) {
-              textColor = Theme.of(context).primaryColor; // Colore primario per il testo dello stato attuale
+              textColor = Theme.of(context).primaryColor;
               textWeight = FontWeight.bold;
             }
 

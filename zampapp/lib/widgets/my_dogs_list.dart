@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../models/dog_model.dart';
 import '../screens/add_dog_screen.dart';
-// Importa la nuova schermata
 import '../screens/edit_dog_screen.dart';
 
 class MyDogsList extends StatelessWidget {
@@ -21,7 +20,6 @@ class MyDogsList extends StatelessWidget {
     bool isShelter = accountType == 'canile';
 
     return StreamBuilder<QuerySnapshot>(
-      // Ascolta in tempo reale i cani dell'utente corrente
       stream: FirebaseFirestore.instance
           .collection('cani')
           .where('proprietarioId', isEqualTo: userId)
@@ -43,14 +41,12 @@ class MyDogsList extends StatelessWidget {
           );
         }
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          // Se non ci sono cani, mostra solo il pulsante per aggiungere
           return _buildAddDogCard(context, isShelter);
         }
 
         final dogs = snapshot.data!.docs.map((doc) => Dog.fromFirestore(doc)).toList();
 
         if (isShelter) {
-          // Griglia per il canile
           return GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -60,10 +56,9 @@ class MyDogsList extends StatelessWidget {
               mainAxisSpacing: 16,
               childAspectRatio: 0.8,
             ),
-            itemCount: dogs.length + 1, // +1 per il pulsante
+            itemCount: dogs.length + 1,
             itemBuilder: (context, index) {
               if (index == 0) return _buildAddDogCard(context, isShelter);
-              // Rendi la card cliccabile
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
@@ -77,15 +72,13 @@ class MyDogsList extends StatelessWidget {
             },
           );
         } else {
-          // Lista orizzontale per l'utente
           return SizedBox(
             height: 180,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: dogs.length + 1, // +1 per il pulsante
+              itemCount: dogs.length + 1,
               itemBuilder: (context, index) {
                 if (index == dogs.length) return _buildAddDogCard(context, isShelter);
-                // Rendi la card cliccabile
                 return GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
@@ -104,7 +97,6 @@ class MyDogsList extends StatelessWidget {
     );
   }
 
-  // Card per aggiungere un cane (rimane uguale)
   Widget _buildAddDogCard(BuildContext context, bool isShelter) {
     return GestureDetector(
       onTap: () {
@@ -131,7 +123,6 @@ class MyDogsList extends StatelessWidget {
     );
   }
 
-  // Contenuto della card del cane (spostato in una funzione separata)
   Widget _buildDogCardContent(BuildContext context, Dog dog) {
     return Container(
       width: 150,

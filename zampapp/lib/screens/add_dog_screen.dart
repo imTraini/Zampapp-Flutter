@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart'; // Aggiungi questa dipendenza se non l'hai già
+import 'package:intl/intl.dart';
 
 class AddDogScreen extends StatefulWidget {
   final String accountType;
@@ -19,7 +19,6 @@ class _AddDogScreenState extends State<AddDogScreen> {
   bool _isLoading = false;
   File? _selectedImage;
 
-  // Controllers per i campi
   final _nomeController = TextEditingController();
   final _razzaController = TextEditingController();
   final _descrizioneController = TextEditingController();

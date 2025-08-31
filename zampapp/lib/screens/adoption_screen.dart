@@ -86,10 +86,6 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
     }
   }
 
-  // ===========================================================================
-  // VISTA UTENTE (NON NECESSITA DI MODIFICHE MAGGIORI)
-  // ===========================================================================
-
   Widget _buildUserView() {
     final userId = _auth.currentUser!.uid;
     return StreamBuilder<QuerySnapshot>(
@@ -176,9 +172,6 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
     }
   }
 
-  // ===========================================================================
-  // VISTA CANILE
-  // ===========================================================================
 
   Widget _buildCanileView() {
     final canileId = _auth.currentUser!.uid;
@@ -309,10 +302,6 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
     }
   }
 }
-
-// ===========================================================================
-// WIDGETS PERSONALIZZATI
-// ===========================================================================
 
 class _DogCard extends StatelessWidget {
   final Dog dog;

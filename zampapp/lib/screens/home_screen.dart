@@ -13,9 +13,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0; // Indice della pagina corrente, 0 = Adozioni
 
-  // Lista delle tre schermate principali
-  // Le classi AdoptionScreen, DonationScreen e ProfileScreen ora verranno trovate
-  // grazie agli import corretti.
   static const List<Widget> _pages = <Widget>[
     AdoptionScreen(),
     DonationScreen(),
@@ -31,12 +28,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Il corpo della Scaffold mostra la pagina selezionata dalla lista
       body: IndexedStack(
         index: _selectedIndex,
         children: _pages,
       ),
-      // Questa è la barra di navigazione in basso
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -56,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped, // Funzione chiamata al tap su un'icona
+        onTap: _onItemTapped,
       ),
     );
   }

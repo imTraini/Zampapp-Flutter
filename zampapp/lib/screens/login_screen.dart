@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'registration_choice_screen.dart'; // Importa la schermata di scelta
+import 'registration_choice_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -100,7 +100,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // Sezione modificata
                 TextButton(
                   onPressed: () {
                     Navigator.push(
