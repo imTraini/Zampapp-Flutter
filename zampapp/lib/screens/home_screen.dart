@@ -11,7 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0; // Indice della pagina corrente, 0 = Adozioni
+  int _selectedIndex = 0;
 
   static const List<Widget> _pages = <Widget>[
     AdoptionScreen(),

@@ -43,6 +43,8 @@ class Dog {
       status: data['status'] ?? 'di_proprieta',
     );
   }
+
+  // Getter aggiuntivi (compatibilità con vecchio codice)
   String get dogName => nome;
   String get dogImageUrl => urlImmagine;
 }

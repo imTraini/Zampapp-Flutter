@@ -74,7 +74,6 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
             backgroundColor: Colors.green,
           ),
         );
-        // Torna indietro di 2 schermate (Signup e Scelta) per arrivare al Login
         int count = 0;
         Navigator.of(context).popUntil((_) => count++ >= 2);
       }

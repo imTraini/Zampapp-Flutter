@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'registration_choice_screen.dart';
+import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -110,7 +111,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: const Text('Non hai un account? Registrati'),
                 ),
                 TextButton(
-                  onPressed: () { /* TODO: Navigare a recupero password */ },
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()),
+                    );
+                  },
                   child: const Text('Password dimenticata?'),
                 ),
               ],

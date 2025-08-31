@@ -25,8 +25,7 @@ class ZampApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ZampApp',
-      theme: ThemeData(.
-        colorScheme: ColorScheme.fromSeed(seedColor: azzurro),
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: azzurro),
         useMaterial3: true,
       ),
       home: const AuthGate(),
