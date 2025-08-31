@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../models/dog_model.dart';
 import '../screens/add_dog_screen.dart';
+// Importa la nuova schermata
+import '../screens/edit_dog_screen.dart';
 
 class MyDogsList extends StatelessWidget {
   final String accountType;
@@ -23,8 +25,6 @@ class MyDogsList extends StatelessWidget {
       stream: FirebaseFirestore.instance
           .collection('cani')
           .where('proprietarioId', isEqualTo: userId)
-      // --- VERSIONE FINALE ---
-      // L'ordinamento per data è riattivato.
           .orderBy('dataAggiunta', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
@@ -32,7 +32,6 @@ class MyDogsList extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasError) {
-          // Se vedi questo errore, significa che l'indice non è stato creato o non è ancora attivo.
           return const Center(
             child: Padding(
               padding: EdgeInsets.all(8.0),
@@ -64,7 +63,17 @@ class MyDogsList extends StatelessWidget {
             itemCount: dogs.length + 1, // +1 per il pulsante
             itemBuilder: (context, index) {
               if (index == 0) return _buildAddDogCard(context, isShelter);
-              return _buildDogCard(context, dogs[index - 1]);
+              // Rendi la card cliccabile
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EditDogScreen(dog: dogs[index - 1]),
+                    ),
+                  );
+                },
+                child: _buildDogCardContent(context, dogs[index - 1]),
+              );
             },
           );
         } else {
@@ -76,7 +85,17 @@ class MyDogsList extends StatelessWidget {
               itemCount: dogs.length + 1, // +1 per il pulsante
               itemBuilder: (context, index) {
                 if (index == dogs.length) return _buildAddDogCard(context, isShelter);
-                return _buildDogCard(context, dogs[index]);
+                // Rendi la card cliccabile
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => EditDogScreen(dog: dogs[index]),
+                      ),
+                    );
+                  },
+                  child: _buildDogCardContent(context, dogs[index]),
+                );
               },
             ),
           );
@@ -85,7 +104,7 @@ class MyDogsList extends StatelessWidget {
     );
   }
 
-  // Card per aggiungere un cane
+  // Card per aggiungere un cane (rimane uguale)
   Widget _buildAddDogCard(BuildContext context, bool isShelter) {
     return GestureDetector(
       onTap: () {
@@ -94,7 +113,7 @@ class MyDogsList extends StatelessWidget {
         ));
       },
       child: Container(
-        width: isShelter ? null : 150, // Larghezza fissa solo per la lista orizzontale
+        width: isShelter ? null : 150,
         margin: isShelter ? null : const EdgeInsets.only(right: 12),
         decoration: BoxDecoration(
           color: Colors.grey.shade200,
@@ -112,8 +131,8 @@ class MyDogsList extends StatelessWidget {
     );
   }
 
-  // Card che mostra le info di un cane
-  Widget _buildDogCard(BuildContext context, Dog dog) {
+  // Contenuto della card del cane (spostato in una funzione separata)
+  Widget _buildDogCardContent(BuildContext context, Dog dog) {
     return Container(
       width: 150,
       margin: const EdgeInsets.only(right: 12),
